@@ -1,0 +1,63 @@
+name: .NET Build
+description: An opinionated action that builds specified projects or the solution itself including all of its dependencies. Default is to build all C# projects located in the src directory.
+inputs:
+  projects:
+    description: Optional path to the project(s) file to build. Pass empty to have MSBuild use the default behavior. Supports globbing.
+    required: true
+    default: 'src/**/*.csproj'
+  configuration:
+    description: Defines the build configuration. Default is Debug.
+    required: true
+    default: 'Debug'
+  framework:
+    description: Compiles for a specific framework. The framework must be defined in the project file. Default is net8.0.
+    required: true
+    default: 'net8.0'
+  level:
+    description: Sets the verbosity level of the command. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]. The default is quiet.
+    required: true
+    default: 'quiet'
+  buildSwitches:
+    description: Provides a way to fully customize the build. Default is empty. See https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-command-line-reference?view=vs-2022#switches for more information.
+    required: false
+    default: ''
+  uploadBuildArtifact:
+    description: Upload the generated build artifact. Default is to upload.
+    required: false
+    default: 'true'
+runs:
+  using: composite
+  steps:
+    - name: Build
+      run: |
+        if [ ${{ inputs.projects }} == "" ]; then
+            dotnet build --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --no-restore --framework ${{ inputs.framework }} ${{ inputs.buildSwitches }}
+        else
+            shopt -s globstar
+            for file in ${{ inputs.projects }}; do
+              dotnet build $file --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --no-restore --framework ${{ inputs.framework }} ${{ inputs.buildSwitches }}
+              echo "Built '$file'"
+            done
+        fi
+      shell: bash
+
+    - if: inputs.uploadBuildArtifact == 'true'
+      name: Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.framework }}-${{ inputs.configuration }}
+        path: ${{ github.workspace }}
+
+    - if: inputs.uploadBuildArtifact == 'true'
+      name: Clean
+      run: |
+        if [ ${{ inputs.projects }} == "" ]; then
+            dotnet clean --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --framework ${{ inputs.framework }}
+        else
+            shopt -s globstar
+            for file in ${{ inputs.projects }}; do
+              dotnet clean $file --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --framework ${{ inputs.framework }}
+              echo "Sweeped previous build for '$file'"
+            done
+        fi
+      shell: bash
