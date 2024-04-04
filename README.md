@@ -29,7 +29,7 @@ uses: codebeltnet/dotnet-build@main
 with:
   # Optional path to the project(s) file to restore. Pass empty to have MSBuild use the default behavior.
   # Supports globbing.
-  projects: '**/*.csproj'
+  projects: 'src/**/*.csproj'
   # Defines the build configuration.
   configuration: 'Release'
   # Compiles for a specific framework. The framework must be defined in the project file.
@@ -50,7 +50,7 @@ This action has no outputs.
 
 ## Examples
 
-### Build for Release and upload build artifact
+### Build for Release in src folder and upload build artifact
 
 ```yaml
 - name: Build for Release
@@ -59,7 +59,7 @@ This action has no outputs.
     configuration: Release
 ```
 
-### Build for Debug and prevent upload of build artifact
+### Build for Debug in src folder
 
 ```yaml
 - name: Build for Debug
