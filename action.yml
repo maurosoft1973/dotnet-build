@@ -61,3 +61,6 @@ runs:
             done
         fi
       shell: bash
+branding:
+  icon: 'umbrella'
+  color: 'blue'
