@@ -1,5 +1,5 @@
 name: .NET Build
-description: An opinionated action that builds specified projects or the solution itself including all of its dependencies. Default is to build all C# projects located in the src directory.
+description: An opinionated action that builds specified projects or the solution itself including all of its dependencies.
 inputs:
   projects:
     description: Optional path to the project(s) file to build. Pass empty to have MSBuild use the default behavior. Supports globbing.
