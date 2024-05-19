@@ -30,7 +30,7 @@ runs:
   steps:
     - name: Build
       run: |
-        if [ ${{ inputs.projects }} == "" ]; then
+        if [ "${{ inputs.projects }}" == "" ]; then
             dotnet build --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --no-restore --framework ${{ inputs.framework }} ${{ inputs.buildSwitches }}
         else
             shopt -s globstar
