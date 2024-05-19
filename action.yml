@@ -51,7 +51,7 @@ runs:
     - if: inputs.uploadBuildArtifact == 'true'
       name: Clean
       run: |
-        if [ ${{ inputs.projects }} == "" ]; then
+        if [ "${{ inputs.projects }}" == "" ]; then
             dotnet clean --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --framework ${{ inputs.framework }}
         else
             shopt -s globstar
