@@ -36,7 +36,9 @@ runs:
       name: Restore
       uses: actions/cache/restore@v4
       with:
-        path: ${{ github.workspace }}
+        path: |
+          ${{ github.workspace }}
+          ~/.nuget/packages
         key: ${{ inputs.restoreCacheKey }}
         fail-on-cache-miss: true
 
