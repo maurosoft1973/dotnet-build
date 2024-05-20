@@ -25,9 +25,21 @@ inputs:
     description: Upload the generated build artifact. Default is to upload.
     required: false
     default: 'true'
+  restoreCacheKey:
+    description: When set, current workspace will be overwritten with the content of the restore cache. Default is empty.
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
+    - if: inputs.restoreCacheKey != ''
+      name: Restore
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}
+        key: ${{ inputs.restoreCacheKey }}
+        fail-on-cache-miss: true
+
     - name: Build
       run: |
         if [ "${{ inputs.projects }}" == "" ]; then

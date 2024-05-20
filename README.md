@@ -42,6 +42,8 @@ with:
   buildSwitches: ''
   # Upload the generated build artifact.
   uploadBuildArtifact: 'true'
+  # When set, current workspace will be overwritten with the content of the restore cache.
+  restoreCacheKey: ''
 ```
 
 ### Outputs
@@ -67,6 +69,16 @@ This action has no outputs.
   with:
     configuration: Debug
     uploadBuildArtifact: false
+```
+
+### Time-consuming Builds for large projects
+
+```yaml
+- name: Build
+  uses: codebeltnet/dotnet-build@v2
+  with:
+    configuration: Debug
+    restoreCacheKey: dotnet-restore-sha256
 ```
 
 ### Sample workflow for .NET Class Library
