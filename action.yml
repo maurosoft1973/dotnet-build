@@ -47,7 +47,7 @@ runs:
         if [ "${{ inputs.projects }}" == "" ]; then
             dotnet build --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --no-restore --framework ${{ inputs.framework }} ${{ inputs.buildSwitches }}
         else
-            shopt -s globstar
+            shopt -s globstar extglob
             for file in ${{ inputs.projects }}; do
               dotnet build $file --configuration ${{ inputs.configuration }} --verbosity ${{ inputs.level }} --no-restore --framework ${{ inputs.framework }} ${{ inputs.buildSwitches }}
               echo "Built '$file'"
