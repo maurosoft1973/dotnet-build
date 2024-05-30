@@ -62,7 +62,9 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.framework }}-${{ inputs.configuration }}
-        path: ${{ github.workspace }}
+        path: | 
+          ${{ github.workspace }}/src
+          ${{ github.workspace }}/test
 
     - if: inputs.uploadBuildArtifact == 'true'
       name: Clean
